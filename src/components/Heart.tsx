@@ -32,7 +32,13 @@ export default function Heart() {
 
   return (
     <mesh ref={mesh} geometry={geometry}>
-      <meshStandardMaterial color="#ff3366" />
+      <meshPhysicalMaterial
+        color="#ff3366"
+        roughness={0.15}
+        metalness={0.4}
+        clearcoat={1}
+        clearcoatRoughness={0}
+      />
     </mesh>
   );
 }
