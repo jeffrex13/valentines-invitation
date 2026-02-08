@@ -4,11 +4,7 @@ import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import Heart from "./Heart";
 import FloatingHearts from "./FloatingHearts";
 
-type HeartSceneProps = {
-  showMessage: boolean;
-};
-
-export default function HeartScene({ showMessage }: HeartSceneProps) {
+export default function HeartScene() {
   return (
     <>
       <Canvas camera={{ position: [0, 0, 8], fov: 60 }}>
@@ -66,9 +62,6 @@ export default function HeartScene({ showMessage }: HeartSceneProps) {
           autoRotateSpeed={0.5}
         />
       </Canvas>
-
-      {/* Optional: You can use showMessage here if needed */}
-      {/* {showMessage && <div className="message">Will you be my Valentine? 🌹</div>} */}
     </>
   );
 }

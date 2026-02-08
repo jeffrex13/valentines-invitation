@@ -1,15 +1,47 @@
+/* Reset and base styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 body {
   font-family: 'Georgia', serif;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  min-height: 100vh;
   color: #fff;
-  overflow-x: hidden;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  background-attachment: fixed;
+}
+
+/* Main container */
+.letter-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+/* Canvas styling */
+canvas {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 1;
 }
 
 /* Overlay/Intro Styling */
@@ -17,9 +49,9 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(rgba(10, 10, 20, 0.95), rgba(20, 15, 35, 0.98));
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(rgba(10, 10, 20, 0.98), rgba(20, 15, 35, 0.97));
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -27,18 +59,19 @@ body {
   z-index: 1000;
   padding: 2rem;
   text-align: center;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(10px);
 }
 
 .overlay h1 {
   font-size: 3.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   background: linear-gradient(45deg, #ff3366, #ff99cc);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   font-family: 'Brush Script MT', cursive;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
+  line-height: 1.2;
 }
 
 .overlay p {
@@ -50,40 +83,66 @@ body {
   opacity: 0.9;
 }
 
-.letter-container {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-}
-
-/* Valentine Letter Styling */
 .valentine-letter {
-  position: absolute;
+  position: fixed; /* Changed from relative to fixed */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90%;
-  max-width: 600px;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 3rem 2.5rem;
+  width: 650px;
+  max-width: 90vw;
+  max-height: 80vh;
+  background: rgba(255, 255, 255, 0.75);
+  padding: 2.5rem 3rem;
   border-radius: 20px;
   color: #333;
-  z-index: 10;
-  box-shadow: 0 20px 60px rgba(255, 51, 102, 0.3),
-              0 0 100px rgba(255, 153, 204, 0.2);
+  z-index: 100;
+  box-shadow: 
+    0 25px 50px rgba(255, 51, 102, 0.3),
+    0 0 100px rgba(255, 153, 204, 0.2),
+    inset 0 0 50px rgba(255, 255, 255, 0.1);
   border: 2px solid #ff99cc;
   animation: floatUp 1s ease-out;
   font-family: 'Georgia', serif;
+  overflow-y: auto;
+  overflow-x: hidden;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  line-height: 1.7;
 }
 
 @keyframes floatUp {
   from {
     opacity: 0;
-    transform: translate(-50%, -40%);
+    transform: translate(-50%, -40%); /* Updated for centered animation */
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); /* Keep it centered */
+  }
+}
+
+.valentine-letter::-webkit-scrollbar {
+  width: 8px;
+}
+
+.valentine-letter::-webkit-scrollbar-track {
+  background: rgba(255, 204, 221, 0.1);
+  border-radius: 4px;
+}
+
+.valentine-letter::-webkit-scrollbar-thumb {
+  background-color: #ff3366;
+  border-radius: 4px;
+}
+
+@keyframes floatUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -99,24 +158,74 @@ body {
   color: #ff3366;
   font-family: 'Brush Script MT', cursive;
   margin-bottom: 0.5rem;
+  line-height: 1.2;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .date {
   font-size: 1.1rem;
   color: #666;
   font-style: italic;
+  letter-spacing: 1px;
 }
 
+/* FIXED TEXT LAYOUT */
 .letter-content {
   font-size: 1.15rem;
   line-height: 1.8;
   color: #444;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: left;
+  word-wrap: break-word;
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: manual; /* Prevent awkward hyphenation */
 }
 
 .letter-content p {
   margin-bottom: 1.5rem;
-  text-align: justify;
+  text-align: left; /* Changed from justify for better readability */
+  text-indent: 0; /* Removed indent for cleaner look */
+  max-width: 100%;
+  white-space: normal;
+}
+
+/* Ensure strong text doesn't break awkwardly */
+.letter-content strong {
+  color: #ff3366;
+  font-weight: bold;
+  white-space: nowrap; /* Keep "call you mine" together */
+}
+
+.letter-content em {
+  color: #ff6699;
+  font-style: italic;
+}
+
+.heart-question {
+  text-align: center;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(255, 102, 153, 0.1), rgba(255, 153, 204, 0.1));
+  border-radius: 15px;
+  border-left: 4px solid #ff3366;
+  border-right: 4px solid #ff3366;
+}
+
+.heart-question h3 {
+  font-size: 2rem;
+  color: #ff3366;
+  margin-bottom: 0.5rem;
+  font-family: 'Brush Script MT', cursive;
+  line-height: 1.3;
+}
+
+.heart-question p {
+  font-size: 1.1rem;
+  color: #666;
+  font-style: italic;
+  text-align: center !important;
+  margin-bottom: 0 !important;
 }
 
 .highlight {
@@ -130,19 +239,27 @@ body {
   font-size: 2.2rem;
   color: #ff3366;
   margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px dashed #ff99cc;
 }
 
 .hearts-decoration {
   position: absolute;
   font-size: 1.5rem;
-  opacity: 0.6;
+  opacity: 0.7;
   z-index: 1;
+  animation: float 3s ease-in-out infinite;
 }
 
-.heart-1 { top: 10px; left: 10px; }
-.heart-2 { top: 10px; right: 10px; }
-.heart-3 { bottom: 10px; left: 10px; }
-.heart-4 { bottom: 10px; right: 10px; }
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(10deg); }
+}
+
+.heart-1 { top: 15px; left: 15px; animation-delay: 0s; }
+.heart-2 { top: 15px; right: 15px; animation-delay: 0.5s; }
+.heart-3 { bottom: 15px; left: 15px; animation-delay: 1s; }
+.heart-4 { bottom: 15px; right: 15px; animation-delay: 1.5s; }
 
 /* Open Button */
 .open-btn {
@@ -155,33 +272,39 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: 'Georgia', serif;
-  letter-spacing: 1px;
-  box-shadow: 0 5px 20px rgba(255, 51, 102, 0.4);
+  letter-spacing: 2px;
+  box-shadow: 
+    0 5px 20px rgba(255, 51, 102, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   position: relative;
   overflow: hidden;
+  min-width: 250px;
 }
 
 .open-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(255, 51, 102, 0.6);
-  letter-spacing: 2px;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 
+    0 10px 30px rgba(255, 51, 102, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  letter-spacing: 3px;
 }
 
 .open-btn:active {
-  transform: translateY(-1px);
+  transform: translateY(-1px) scale(1.02);
 }
 
 .open-btn::after {
   content: '💕';
   position: absolute;
-  right: 20px;
+  right: 25px;
   opacity: 0;
   transition: all 0.3s ease;
+  transform: translateX(10px);
 }
 
 .open-btn:hover::after {
   opacity: 1;
-  right: 30px;
+  transform: translateX(0);
 }
 
 /* Response Buttons */
@@ -190,6 +313,7 @@ body {
   gap: 2rem;
   justify-content: center;
   margin-top: 3rem;
+  padding: 0 1rem;
 }
 
 .response-btn {
@@ -203,44 +327,219 @@ body {
   font-weight: bold;
   position: relative;
   overflow: hidden;
-  min-width: 150px;
+  min-width: 160px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  letter-spacing: 1px;
 }
 
 .yes-btn {
   background: linear-gradient(45deg, #4CAF50, #8BC34A);
   color: white;
-  box-shadow: 0 5px 20px rgba(76, 175, 80, 0.3);
 }
 
 .no-btn {
   background: linear-gradient(45deg, #f44336, #ff9800);
   color: white;
-  box-shadow: 0 5px 20px rgba(244, 67, 54, 0.3);
 }
 
 .response-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  letter-spacing: 1px;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  letter-spacing: 2px;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+.response-btn:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+/* Success/Rejection Screens */
+.success-screen, .rejection-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  padding: 2rem;
+  text-align: center;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.success-screen {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.95), rgba(139, 195, 74, 0.95));
+}
+
+.rejection-screen {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.95), rgba(255, 152, 0, 0.95));
+}
+
+.success-screen h1, .rejection-screen h1 {
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.success-screen p, .rejection-screen p {
+  font-size: 1.3rem;
+  color: white;
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 3rem;
+  opacity: 0.95;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* DESKTOP SPECIFIC FIXES */
+@media (min-width: 1024px) {
   .valentine-letter {
-    width: 95%;
-    padding: 2rem 1.5rem;
+    width: 700px; /* Even wider for desktop */
+    padding: 3rem 3.5rem;
+    max-height: 85vh;
+  }
+  
+  .letter-content {
+    font-size: 1.2rem;
+    line-height: 1.9;
+  }
+  
+  .letter-content p {
+    margin-bottom: 1.8rem;
+    text-align: justify; /* Use justify only on desktop where it looks good */
+  }
+  
+  .heart-question {
+    margin: 2.5rem 0;
+    padding: 2rem;
+  }
+  
+  .heart-question h3 {
+    font-size: 2.2rem;
+  }
+}
+
+/* Tablet and smaller desktop */
+@media (max-width: 1023px) and (min-width: 769px) {
+  .valentine-letter {
+    width: 600px;
+    padding: 2.5rem;
+  }
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+  .overlay h1 {
+    font-size: 2.5rem;
+  }
+  
+  .overlay p {
+    font-size: 1.1rem;
+    padding: 0 1rem;
+  }
+  
+  .valentine-letter {
+    width: 95vw;
+    padding: 2rem;
+    max-height: 80vh;
   }
   
   .letter-header h2 {
     font-size: 2.2rem;
   }
   
-  .overlay h1 {
-    font-size: 2.5rem;
+  .letter-content {
+    font-size: 1rem;
+    line-height: 1.6;
+    text-align: left; /* Always left align on mobile */
+  }
+  
+  .letter-content p {
+    text-align: left !important;
+    text-indent: 0 !important;
+  }
+  
+  .heart-question h3 {
+    font-size: 1.8rem;
   }
   
   .response-buttons {
     flex-direction: column;
+    gap: 1rem;
     align-items: center;
+  }
+  
+  .response-btn {
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  .open-btn {
+    min-width: 200px;
+    padding: 0.9rem 2rem;
+    font-size: 1.1rem;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .overlay h1 {
+    font-size: 2rem;
+  }
+  
+  .valentine-letter {
+    padding: 1.5rem;
+  }
+  
+  .letter-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  .letter-content {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  .signature {
+    font-size: 1.8rem;
+  }
+  
+  .open-btn {
+    font-size: 1rem;
+    padding: 0.8rem 1.5rem;
+    min-width: 180px;
+  }
+}
+
+/* Tall screens */
+@media (min-height: 800px) {
+  .valentine-letter {
+    max-height: 75vh;
+  }
+}
+
+/* Landscape mode */
+@media (max-height: 600px) and (orientation: landscape) {
+  .valentine-letter {
+    max-height: 90vh;
+    padding: 1.5rem;
+  }
+  
+  .letter-content {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  .response-buttons {
+    margin-top: 1.5rem;
   }
 }

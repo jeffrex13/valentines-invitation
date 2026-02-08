@@ -6,31 +6,38 @@ type FloatingHeartsProps = {
   count: number;
 };
 
+// Avoid impure Math.random() calls
+function seededRandom(seed: number): number {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
+
+function getRandomColor(index: number): THREE.Color {
+  const r = 0.8 + seededRandom(index * 0.1) * 0.2;
+  const g = 0.2 + seededRandom(index * 0.2) * 0.3;
+  const b = 0.4 + seededRandom(index * 0.3) * 0.3;
+  return new THREE.Color(r, g, b);
+}
+
+function getRandomPosition(index: number): [number, number, number] {
+  const x = (seededRandom(index * 0.4) - 0.5) * 10;
+  const y = (seededRandom(index * 0.5) - 0.5) * 10;
+  const z = (seededRandom(index * 0.6) - 0.5) * 6;
+  return [x, y, z];
+}
+
 export default function FloatingHearts({ count }: FloatingHeartsProps) {
   const group = useRef<THREE.Group>(null!);
   const hearts = useRef<THREE.Mesh[]>([]);
 
-  // Pre-generate random colors and positions using useMemo
+  // Pre-generate deterministic colors and positions
   const { colors, initialPositions } = useMemo(() => {
     const colors: THREE.Color[] = [];
     const initialPositions: [number, number, number][] = [];
 
     for (let i = 0; i < count; i++) {
-      // Generate colors once during initialization
-      colors.push(
-        new THREE.Color(
-          0.8 + Math.random() * 0.2, // R
-          0.2 + Math.random() * 0.3, // G
-          0.4 + Math.random() * 0.3 // B
-        )
-      );
-
-      // Generate initial random positions
-      initialPositions.push([
-        (Math.random() - 0.5) * 10,
-        (Math.random() - 0.5) * 10,
-        (Math.random() - 0.5) * 6,
-      ]);
+      colors.push(getRandomColor(i));
+      initialPositions.push(getRandomPosition(i));
     }
 
     return { colors, initialPositions };
@@ -47,7 +54,6 @@ export default function FloatingHearts({ count }: FloatingHeartsProps) {
       const radius = 3 + Math.sin(time * 0.5 + i) * 0.5;
       const basePosition = initialPositions[i];
 
-      // Add gentle floating motion to the initial position
       heart.position.x =
         basePosition[0] + Math.cos(time * speed + i) * radius * 0.3;
       heart.position.y =
@@ -87,6 +93,7 @@ export default function FloatingHearts({ count }: FloatingHeartsProps) {
   );
 }
 
+// Heart geometry with memoization
 function createHeartGeometry() {
   const shape = new THREE.Shape();
 

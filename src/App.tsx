@@ -27,17 +27,14 @@ export default function App() {
         </div>
       )}
 
-      <HeartScene showMessage={started} />
+      <HeartScene />
 
       {started && response === "pending" && (
         <ValentineLetter onResponse={handleResponse} />
       )}
 
       {response === "yes" && (
-        <div
-          className="overlay"
-          style={{ background: "rgba(76, 175, 80, 0.95)" }}
-        >
+        <div className="success-screen">
           <h1>🎉 You've Made Me So Happy! 💝</h1>
           <p>
             I can't wait to celebrate this special day with you! Get ready for
@@ -45,7 +42,11 @@ export default function App() {
           </p>
           <div
             className="hearts"
-            style={{ fontSize: "3rem", marginTop: "2rem" }}
+            style={{
+              fontSize: "3rem",
+              marginTop: "2rem",
+              marginBottom: "2rem",
+            }}
           >
             💕💖💝🌹✨
           </div>
@@ -55,10 +56,7 @@ export default function App() {
               setStarted(false);
               setResponse("pending");
             }}
-            style={{
-              marginTop: "2rem",
-              background: "linear-gradient(45deg, #4CAF50, #8BC34A)",
-            }}
+            style={{ background: "linear-gradient(45deg, #4CAF50, #8BC34A)" }}
           >
             Experience Again
           </button>
@@ -66,10 +64,7 @@ export default function App() {
       )}
 
       {response === "no" && (
-        <div
-          className="overlay"
-          style={{ background: "rgba(244, 67, 54, 0.95)" }}
-        >
+        <div className="rejection-screen">
           <h1>💔 That's Okay...</h1>
           <p>
             My feelings for you remain true regardless. Thank you for being

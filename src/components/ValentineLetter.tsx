@@ -12,7 +12,7 @@ export default function ValentineLetter({ onResponse }: ValentineLetterProps) {
 
       <div className="letter-header">
         <h2>To My Beloved</h2>
-        <div className="date">February 14th, 2024</div>
+        <div className="date">February 14th</div>
       </div>
 
       <div className="letter-content">
@@ -30,9 +30,9 @@ export default function ValentineLetter({ onResponse }: ValentineLetterProps) {
 
         <p>
           This Valentine's Day, I want to make a simple request —
-          <span className="highlight"> a request to call you mine</span>, to
-          cherish you, to create memories that sparkle brighter than any star in
-          this simulation.
+          <strong> a request to call you mine</strong>, to cherish you, to
+          create memories that sparkle brighter than any star in this
+          simulation.
         </p>
 
         <p>
@@ -40,6 +40,11 @@ export default function ValentineLetter({ onResponse }: ValentineLetterProps) {
           real one you hold in your hands, asking the most important question of
           this year...
         </p>
+
+        <div className="heart-question">
+          <h3>Will you be my Valentine? 💝</h3>
+          <p>This heart beats only for you</p>
+        </div>
       </div>
 
       <div className="letter-footer">
@@ -54,13 +59,13 @@ export default function ValentineLetter({ onResponse }: ValentineLetterProps) {
             className="response-btn yes-btn"
             onClick={() => onResponse("yes")}
           >
-            Yes! 💝
+            Yes! 🌹
           </button>
           <button
             className="response-btn no-btn"
             onClick={() => onResponse("no")}
           >
-            Maybe Later 🌹
+            Maybe Later 💕
           </button>
         </div>
       </div>
