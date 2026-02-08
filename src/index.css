@@ -25,7 +25,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100vw !important; /* Force full width */
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -84,30 +84,57 @@ canvas {
 }
 
 .valentine-letter {
-  position: fixed; /* Changed from relative to fixed */
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 650px;
   max-width: 90vw;
   max-height: 80vh;
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.98);
   padding: 2.5rem 3rem;
   border-radius: 20px;
   color: #333;
   z-index: 100;
   box-shadow: 
-    0 25px 50px rgba(255, 51, 102, 0.3),
-    0 0 100px rgba(255, 153, 204, 0.2),
+    0 25px 50px rgba(255, 51, 102, 0.4),
+    0 0 100px rgba(255, 153, 204, 0.3),
     inset 0 0 50px rgba(255, 255, 255, 0.1);
-  border: 2px solid #ff99cc;
-  animation: floatUp 1s ease-out;
+  border: 3px solid #ff99cc;
+  animation: letterEntrance 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   font-family: 'Georgia', serif;
   overflow-y: auto;
   overflow-x: hidden;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   line-height: 1.7;
+}
+
+.valentine-letter ~ canvas {
+  filter: blur(2px) brightness(0.8);
+  transition: filter 0.5s ease;
+}
+
+@keyframes letterEntrance {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3) rotate(-10deg);
+    filter: blur(10px);
+  }
+  30% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1.1) rotate(5deg);
+    filter: blur(5px);
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(0.95) rotate(-2deg);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    filter: blur(0);
+  }
 }
 
 @keyframes floatUp {
@@ -542,4 +569,107 @@ canvas {
   .response-buttons {
     margin-top: 1.5rem;
   }
+}
+
+/* Envelope Screen */
+.envelope-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(22, 33, 62, 0.97));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 2rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.envelope-screen h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(45deg, #ff3366, #ff99cc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-family: 'Brush Script MT', cursive;
+  letter-spacing: 3px;
+  line-height: 1.2;
+}
+
+.envelope-screen p {
+  font-size: 1.2rem;
+  margin-bottom: 3rem;
+  color: #e6e6fa;
+  max-width: 600px;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.envelope-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.envelope-btn::before {
+  content: '✉️';
+  position: absolute;
+  left: 20px;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.3s ease;
+}
+
+.envelope-btn:hover::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.envelope-btn::after {
+  content: '💌';
+  position: absolute;
+  right: 20px;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.3s ease;
+}
+
+.envelope-btn:hover::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Add these styles to index.css */
+.envelope-landing {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  background: radial-gradient(circle at center, 
+    rgba(30, 20, 40, 0.95) 0%, 
+    rgba(20, 10, 30, 0.98) 100%
+  );
+}
+
+.envelope-opening {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  background: radial-gradient(circle at center, 
+    rgba(30, 20, 40, 0.95) 0%, 
+    rgba(20, 10, 30, 0.98) 100%
+  );
 }
