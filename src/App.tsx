@@ -70,7 +70,7 @@ export default function App() {
             className="hearts"
             style={{ fontSize: "3rem", margin: "2rem 0" }}
           >
-            💕💖💝🌹✨
+            💝🌹✨
           </div>
           <button
             className="open-btn"

@@ -1,7 +1,6 @@
 import { Canvas } from "@react-three/fiber";
-import { Environment, Float, OrbitControls, Stars } from "@react-three/drei";
+import { Environment, OrbitControls, Stars } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
-import Heart from "./Heart";
 import FloatingHearts from "./FloatingHearts";
 
 export default function HeartScene() {
@@ -32,11 +31,6 @@ export default function HeartScene() {
 
         {/* Additional glowing point lights for romance */}
         <pointLight position={[4, 3, 1]} intensity={1} color="#ff99ff" />
-
-        {/* Main Heart with floating animation */}
-        <Float speed={1.5} rotationIntensity={0.8} floatIntensity={1.5}>
-          <Heart />
-        </Float>
 
         {/* Floating hearts particles */}
         <FloatingHearts count={15} />

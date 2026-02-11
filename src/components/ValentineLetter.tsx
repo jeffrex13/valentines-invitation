@@ -10,8 +10,6 @@ export default function ValentineLetter({ onResponse }: ValentineLetterProps) {
   const [isPlaying, setIsPlaying] = useState(false);
 
 useEffect(() => {
-    // 1. Capture the current ref value to a variable
-    // This fixes the ESLint warning because we lock in the reference
     const audio = audioRef.current;
 
     if (audio) {

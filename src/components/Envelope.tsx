@@ -7,7 +7,6 @@ type EnvelopeProps = {
 
 export default function Envelope({ isClosed }: EnvelopeProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
 
   // Remove the useEffect that causes the warning
   // Instead, derive isOpen from isClosed prop
@@ -26,8 +25,6 @@ export default function Envelope({ isClosed }: EnvelopeProps) {
       className={`envelope-container ${isClosed ? "closed" : ""} ${
         isOpen ? "open" : ""
       }`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       style={{ cursor: isClosed ? "pointer" : "default" }}
     >
       <div className="envelope">
@@ -50,18 +47,6 @@ export default function Envelope({ isClosed }: EnvelopeProps) {
 
         {/* Envelope Back - Empty for realistic opening */}
         <div className="envelope-back"></div>
-      </div>
-
-      {/* Letter that appears outside the envelope */}
-      <div className="envelope-letter">
-        <div className="letter-inside">
-          <div className="letter-content-mini">
-            <div className="heart-pulse">💝</div>
-            {isClosed && isHovered && (
-              <div className="click-hint">Click to open</div>
-            )}
-          </div>
-        </div>
       </div>
 
       <div className="envelope-glow"></div>
