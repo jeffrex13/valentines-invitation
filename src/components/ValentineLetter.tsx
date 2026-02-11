@@ -1,118 +1,144 @@
-import { useEffect, useRef, useState } from 'react';
-import SparksInstrumental from '../assets/Sparks-Instrumental.mp3';
+import { useEffect, useRef, useState } from "react";
+import SparksInstrumental from "../assets/Sparks-Instrumental.mp3";
 
 type ValentineLetterProps = {
   onResponse: (response: "yes" | "no") => void;
+  allowMusic?: boolean;
 };
 
-export default function ValentineLetter({ onResponse }: ValentineLetterProps) {
+export default function ValentineLetter({
+  onResponse,
+  allowMusic = false,
+}: ValentineLetterProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-useEffect(() => {
+  useEffect(() => {
     const audio = audioRef.current;
-    
     let fadeInterval: ReturnType<typeof setInterval>;
 
     if (audio) {
       audio.volume = 0;
-      
-      const playPromise = audio.play();
-      
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            fadeInterval = setInterval(() => {
-              if (audio.volume < 0.5) { 
-                const newVolume = audio.volume + 0.05;
-                audio.volume = newVolume > 0.5 ? 0.5 : newVolume;
-              } else {
-                clearInterval(fadeInterval);
+      if (allowMusic) {
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              fadeInterval = setInterval(() => {
+                if (audio.volume < 0.5) {
+                  const newVolume = audio.volume + 0.05;
+                  audio.volume = newVolume > 0.5 ? 0.5 : newVolume;
+                } else {
+                  clearInterval(fadeInterval);
+                }
+              }, 200);
+            })
+            .catch((error) => {
+              if (
+                error.name === "AbortError" ||
+                error.name === "NotAllowedError"
+              ) {
+                // Do nothing, this is expected behavior
+                return;
               }
-            }, 200); 
-          })
-          .catch(error => {
-            if (error.name === "AbortError" || error.name === "NotAllowedError") {
-              // Do nothing, this is expected behavior
-              return;
-            }
-            // Only log real errors
-            console.error("Audio playback error:", error);
-          });
+              // Only log real errors
+              console.error("Audio playback error:", error);
+            });
+        }
+      } else {
+        audio.pause();
+        audio.currentTime = 0;
       }
     }
 
     return () => {
       if (fadeInterval) clearInterval(fadeInterval);
-      
       if (audio) {
         audio.pause();
-        audio.currentTime = 0; 
+        audio.currentTime = 0;
       }
     };
-  }, []);
+  }, [allowMusic]);
 
   return (
     <div className="valentine-letter">
       <audio ref={audioRef} src={SparksInstrumental} loop />
 
-      <button 
+      <button
         className="music-toggle"
         onClick={() => {
-          if(audioRef.current) {
-            if(isPlaying) audioRef.current.pause();
+          if (audioRef.current && allowMusic) {
+            if (isPlaying) audioRef.current.pause();
             else audioRef.current.play();
             setIsPlaying(!isPlaying);
           }
         }}
-        style={{ position: 'absolute', top: 10, right: 10, zIndex: 100, background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}
+        style={{
+          position: "absolute",
+          top: 10,
+          right: 10,
+          zIndex: 100,
+          background: "none",
+          border: "none",
+          fontSize: "1.5rem",
+          cursor: allowMusic ? "pointer" : "not-allowed",
+          opacity: allowMusic ? 1 : 0.5,
+        }}
+        disabled={!allowMusic}
       >
-        {isPlaying ? '🔊' : '🔇'}
+        {isPlaying && allowMusic ? "🔊" : "🔇"}
       </button>
 
       <div className="letter-header">
-        <h2>To My Beloved</h2>
-        <div className="date">February 14th</div>
+        <h2>Happy Valentine's Day</h2>
       </div>
 
       <div className="letter-content">
         <p>
-          My dearest, as you see this heart floating before you, know that it
-          beats only for you. Every rotation, every glow, every shimmer is a
-          reflection of my feelings.
+          <strong>To Jamie,</strong>
+        </p>
+        <p>
+          Hi love! I'm not really good with big or fancy words,
+          <br />
+          but I just want to say this simply and honestly.
         </p>
 
         <p>
-          From the moment our paths crossed, my world gained colors I never knew
-          existed. Your smile became my sunrise, your laughter my favorite
-          melody, and your presence my greatest comfort.
+          Being with you feels easy.
+          <br />
+          Comfortable.
+          <br />
+          Like home.
         </p>
 
         <p>
-          This Valentine's Day, I want to make a simple request —
-          <strong> a request to call you mine</strong>, to cherish you, to
-          create memories that sparkle brighter than any star in this
-          simulation.
+          Even our normal days, walking around, eating out, doing nothing
+          special, they're my favorite, because I get to spend them with you.
         </p>
 
         <p>
-          So here I am, with a digital heart that pales in comparison to the
-          real one you hold in your hands, asking the most important question of
-          this year...
+          That's why this Valentine's Day, I want to do something a little
+          different.
+        </p>
+
+        <p>
+          So consider this my small invitation, let me take you out, spend the
+          weekend together, and make a few more memories with you, just us, no
+          rush, no pressure, just time together.
         </p>
 
         <div className="heart-question">
-          <h3>Will you be my Valentine? 💝</h3>
-          <p>This heart beats only for you</p>
+          <h3>Will you be my Valentine and go on this date with me? 💝</h3>
         </div>
+
+        <p>
+          Happy Valentine's Day.
+          <br />I love you. Always.
+        </p>
       </div>
 
       <div className="letter-footer">
-        <div className="signature">
-          With all my love,
-          <br />
-          Your Valentine
-        </div>
+        <div className="signature">Forever yours</div>
 
         <div className="response-buttons">
           <button
@@ -123,9 +149,17 @@ useEffect(() => {
           </button>
           <button
             className="response-btn no-btn"
-            onClick={() => onResponse("no")}
+            onClick={(e) => {
+              const btn = e.currentTarget;
+              btn.classList.add("shake");
+              setTimeout(() => {
+                btn.classList.remove("shake");
+                btn.disabled = true;
+                btn.innerText = "Nice try 😏";
+              }, 400);
+            }}
           >
-            Maybe Later 💕
+            No 🚫
           </button>
         </div>
       </div>

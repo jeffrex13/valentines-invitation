@@ -34,7 +34,7 @@ export default function Envelope({ isClosed }: EnvelopeProps) {
           <div className="envelope-body">
             <div className="address">
               <div className="to-label">TO MY VALENTINE</div>
-              <div className="recipient">My Beloved</div>
+              <div className="recipient">My Jamie</div>
               <div className="from-label">With all my love 💕</div>
             </div>
           </div>

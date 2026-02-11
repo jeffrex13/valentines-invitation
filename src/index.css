@@ -1,3 +1,15 @@
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+  100% { transform: translateX(0); }
+}
+
+.response-btn.no-btn.shake {
+  animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
 /* Reset and base styles */
 * {
   margin: 0;
@@ -148,18 +160,31 @@ canvas {
   }
 }
 
+.valentine-letter {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.valentine-letter:hover {
+  scrollbar-color: rgba(255, 51, 102, 0.3) transparent;
+}
+
 .valentine-letter::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
 }
 
 .valentine-letter::-webkit-scrollbar-track {
-  background: rgba(255, 204, 221, 0.1);
-  border-radius: 4px;
+  background: transparent;
 }
 
 .valentine-letter::-webkit-scrollbar-thumb {
-  background-color: #ff3366;
+  background-color: transparent;
   border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.valentine-letter:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 51, 102, 0.3);
 }
 
 @keyframes floatUp {
@@ -398,22 +423,79 @@ canvas {
   animation: fadeIn 0.5s ease-out;
 }
 
+
 .success-screen {
-  background: linear-gradient(135deg, rgba(76, 175, 80, 0.95), rgba(139, 195, 74, 0.95));
+  background: linear-gradient(135deg, #ff99cc 0%, #ffe0f7 100%);
+  overflow: hidden;
 }
+
+.success-hearts {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.success-heart {
+  position: absolute;
+  font-size: 2.5rem;
+  animation: floatHeart 2.5s ease-in infinite;
+  opacity: 0.85;
+}
+
+@keyframes floatHeart {
+  0% { transform: translateY(0) scale(1) rotate(-10deg); opacity: 0.7; }
+  50% { transform: translateY(-60px) scale(1.2) rotate(10deg); opacity: 1; }
+  100% { transform: translateY(-120px) scale(1) rotate(-10deg); opacity: 0; }
+}
+
+.success-sparkle {
+  position: absolute;
+  font-size: 1.5rem;
+  animation: sparkle 1.2s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes sparkle {
+  0% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.2) rotate(20deg); }
+  100% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+}
+
+.confetti {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+  
 
 .rejection-screen {
   background: linear-gradient(135deg, rgba(244, 67, 54, 0.95), rgba(255, 152, 0, 0.95));
 }
 
+
 .success-screen h1, .rejection-screen h1 {
-  font-size: 3rem;
+  font-size: 2.1rem;
   margin-bottom: 2rem;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(255, 51, 102, 0.18);
 }
 
-.success-screen p, .rejection-screen p {
+
+.success-screen p {
+  font-size: 1.3rem;
+  color: #b1004b;
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 3rem;
+  opacity: 0.98;
+  text-shadow: 0 1px 6px #fff6, 0 2px 12px #fff3;
+}
+
+.rejection-screen p {
   font-size: 1.3rem;
   color: white;
   max-width: 600px;
