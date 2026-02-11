@@ -1,14 +1,59 @@
+import { useEffect, useRef, useState } from 'react';
+import SparksInstrumental from '../assets/Sparks-Instrumental.mp3';
+
 type ValentineLetterProps = {
   onResponse: (response: "yes" | "no") => void;
 };
 
 export default function ValentineLetter({ onResponse }: ValentineLetterProps) {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+useEffect(() => {
+    // 1. Capture the current ref value to a variable
+    // This fixes the ESLint warning because we lock in the reference
+    const audio = audioRef.current;
+
+    if (audio) {
+      audio.volume = 0.5;
+      
+      const playPromise = audio.play();
+      
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => setIsPlaying(true))
+          .catch((error) => {
+            console.log("Auto-play prevented:", error);
+            setIsPlaying(false);
+          });
+      }
+    }
+
+    return () => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    };
+  }, []);
+
   return (
     <div className="valentine-letter">
-      <div className="hearts-decoration heart-1">💖</div>
-      <div className="hearts-decoration heart-2">💝</div>
-      <div className="hearts-decoration heart-3">💕</div>
-      <div className="hearts-decoration heart-4">💘</div>
+      <audio ref={audioRef} src={SparksInstrumental} loop />
+
+      <button 
+        className="music-toggle"
+        onClick={() => {
+          if(audioRef.current) {
+            if(isPlaying) audioRef.current.pause();
+            else audioRef.current.play();
+            setIsPlaying(!isPlaying);
+          }
+        }}
+        style={{ position: 'absolute', top: 10, right: 10, zIndex: 100, background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}
+      >
+        {isPlaying ? '🔊' : '🔇'}
+      </button>
 
       <div className="letter-header">
         <h2>To My Beloved</h2>
