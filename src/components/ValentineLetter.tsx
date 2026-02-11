@@ -11,26 +11,43 @@ export default function ValentineLetter({ onResponse }: ValentineLetterProps) {
 
 useEffect(() => {
     const audio = audioRef.current;
+    
+    let fadeInterval: ReturnType<typeof setInterval>;
 
     if (audio) {
-      audio.volume = 0.5;
+      audio.volume = 0;
       
       const playPromise = audio.play();
       
       if (playPromise !== undefined) {
         playPromise
-          .then(() => setIsPlaying(true))
-          .catch((error) => {
-            console.log("Auto-play prevented:", error);
-            setIsPlaying(false);
+          .then(() => {
+            fadeInterval = setInterval(() => {
+              if (audio.volume < 0.5) { 
+                const newVolume = audio.volume + 0.05;
+                audio.volume = newVolume > 0.5 ? 0.5 : newVolume;
+              } else {
+                clearInterval(fadeInterval);
+              }
+            }, 200); 
+          })
+          .catch(error => {
+            if (error.name === "AbortError" || error.name === "NotAllowedError") {
+              // Do nothing, this is expected behavior
+              return;
+            }
+            // Only log real errors
+            console.error("Audio playback error:", error);
           });
       }
     }
 
     return () => {
+      if (fadeInterval) clearInterval(fadeInterval);
+      
       if (audio) {
         audio.pause();
-        audio.currentTime = 0;
+        audio.currentTime = 0; 
       }
     };
   }, []);
